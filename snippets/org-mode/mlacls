@@ -1,0 +1,17 @@
+# key: mla
+# name: mlacls
+# condition: t
+# --
+#+OPTIONS: toc:nil title:nil
+#+LATEX_CLASS: mla
+#+AUTHOR: $1
+#+LATEX_HEADER: \professor{$2}
+#+LATEX_HEADER: \course{$3}
+#+DATE: \mladate
+#+bibliography: `(file-name-base buffer-file-name)`.bib
+#+LATEX: \begin{paper}
+$0
+#+LATEX: \end{paper}
+#+BEGIN_workscited
+#+print_bibliography: :heading none
+#+END_workscited

@@ -1,0 +1,437 @@
+#+TITLE: DOOM EMACS Config
+#+LATEX_HEADER: \usepackage[margin=0.5in]{geometry}
+
+Place your private configuration here! Remember, you do not need to run 'doom
+sync' after modifying this file!
+
+* Some functionality uses this to identify you, e.g. GPG configuration, email clients, file templates and snippets.
+#+BEGIN_SRC elisp :tangle no
+(setq user-full-name "Cobalt Space"
+      user-mail-address "cobaltspace@protonmail.com")
+#+END_SRC
+
+* Font
+Doom exposes five (optional) variables for controlling fonts in Doom. Here
+are the three important ones:
+
++ `doom-font'
++ `doom-variable-pitch-font'
++ `doom-big-font' -- used for `doom-big-font-mode'; use this for
+  presentations or streaming.
+
+They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
+font string. You generally only need these two:
+#+BEGIN_SRC elisp
+(setq doom-font (font-spec :family "Fantasque Sans Mono" :size 14)
+;; (setq doom-font (font-spec :family "Source Han Mono" :size 12)
+      doom-variable-pitch-font (font-spec :family "Ubuntu")
+      doom-unicode-font doom-font)
+;; (after! unicode-fonts (setq doom-unicode-font (font-spec :family "IPAexGothic")))
+;; (after! unicode-fonts (setq doom-unicode-font doom-font))
+#+END_SRC
+
+testing *bold* /italic/ _underline_ ~code~ +striketrhough+
+
+* Theme
+There are two ways to load a theme. Both assume the theme is installed and
+available. You can either set `doom-theme' or manually load a theme with the
+`load-theme' function. This is the default:
+#+BEGIN_SRC elisp
+(setq doom-theme 'doom-tokyo-night)
+(setq rand-theme-unwanted '(doom-acario-light
+                            doom-feather-light
+                            doom-manokai-machine
+                            doom-opera-light
+                            modus-vivendi-deuteranopia
+                            modus-operandi
+                            adwaita
+                            ))
+(rand-theme)
+#+END_SRC
+
+* Org Directory
+If you use `org' and don't want your org files in the default location below,
+change `org-directory'. It must be set before org loads!
+#+BEGIN_SRC elisp
+(setq org-directory "~/Documents/Org/"
+      org-roam-directory "~/Documents/Roam")
+#+END_SRC
+* Number Lines
+This determines the style of line numbers in effect. If set to `nil', line
+numbers are disabled. For relative line numbers, set this to `relative'.
+#+BEGIN_SRC elisp
+(setq display-line-numbers-type 'relative)
+#+END_SRC
+
+* Extra Config
+Here are some additional functions/macros that could help you configure Doom:
+
+- `load!' for loading external *.el files relative to this one
+- `use-package' for configuring packages
+- `after!' for running code after a package has loaded
+- `add-load-path!' for adding directories to the `load-path', relative to
+  this file. Emacs searches the `load-path' when you load packages with
+  `require' or `use-package'.
+- `map!' for binding new keys
+
+To get information about any of these functions/macros, move the cursor over
+the highlighted symbol at press 'K' (non-evil users must press 'C-c g k').
+This will open documentation for it, including demos of how they are used.
+
+You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
+they are implemented.
+
+** Tab line similar to what vim plugin minibufexpl does
+#+BEGIN_SRC elisp
+(global-tab-line-mode)
+#+END_SRC
+** indent guide
+#+begin_src elisp
+(setq highlight-indent-guides-method 'bitmap)
+#+end_src
+** evil
+*** Fcitx (for japanese input)
+#+BEGIN_SRC elisp
+(after! fcitx (fcitx-aggressive-setup))
+(setq fcitx-remote-command "fcitx5-remote")
+(fcitx-aggressive-setup)
+#+END_SRC
+** Autosave
+#+BEGIN_SRC elisp
+(setq auto-save-visited-mode t)
+#+END_SRC
+** LaTeX
+*** Enable tab key for cdlatex
+#+BEGIN_SRC elisp
+(map! :map cdlatex-mode-map :i "TAB" #'cdlatex-tab)
+#+END_SRC
+
+*** Indentation see brackets
+#+BEGIN_SRC elisp
+(setq TeX-indent-open-delimiters "[")
+(setq TeX-indent-close-delimiters "]")
+(defun TeX-brace-count-line ()
+  "Count number of open/closed braces."
+  (save-excursion
+    (let ((count 0) (limit (line-end-position)) char)
+      (while (progn
+               (skip-chars-forward "^{}[]\\\\" limit)
+               (when (and (< (point) limit) (not (TeX-in-comment)))
+                 (setq char (char-after))
+                 (forward-char)
+                 (cond ((eq char ?\{)
+                        (setq count (+ count TeX-brace-indent-level)))
+                       ((eq char ?\})
+                        (setq count (- count TeX-brace-indent-level)))
+                       ((eq char ?\[)
+                        (setq count (+ count TeX-brace-indent-level)))
+                       ((eq char ?\])
+                        (setq count (- count TeX-brace-indent-level)))
+                       ((eq char ?\\)
+                        (when (< (point) limit)
+                          (forward-char)
+                          t))))))
+      count)))
+#+END_SRC
+*** sub/superscript improvements
+**** Make size the same so width of characters is the same
+#+BEGIN_SRC elisp
+(custom-set-faces!
+  '(font-latex-subscript-face nil)
+  '(font-latex-superscript-face nil))
+#+END_SRC
+**** Make nested go further up/down
+#+BEGIN_SRC elisp
+(setq font-latex-fontify-script 'multi-level)
+#+END_SRC
+
+** Org Mode
+*** Startup
+**** Inline images
+#+BEGIN_SRC elisp
+(setq org-startup-with-inline-images t)
+#+END_SRC
+**** Folding
+#+BEGIN_SRC elisp
+(setq org-startup-folded t)
+#+END_SRC
+**** Pretty Entities
+#+BEGIN_SRC elisp
+(after! org (setq org-pretty-entities t))
+#+END_SRC
+**** Hide Emphasis Markers
+#+BEGIN_SRC elisp
+(after! org (setq org-hide-emphasis-markers t))
+#+END_SRC
+**** colored text
+#+begin_src elisp
+(after! org (require 'org-colored-text))
+#+end_src
+*** Superstar bullets
+#+BEGIN_SRC elisp
+(setq org-superstar-item-bullet-alist
+      '((42 . 8226)
+        (43 . 8227)
+        (45 . 8211)))
+#+END_SRC
+*** Dynamic Numbering
+#+BEGIN_SRC elisp
+(setq org-startup-numerated t
+      org-num-skip-unnumbered t)
+#+END_SRC
+*** appear
+#+begin_src elisp
+(add-hook! org-mode 'org-appear-mode)
+(setq org-appear-autolinks 't
+      org-appear-autosubmarkers 't
+      org-appear-autoentities 't
+      org-appear-autokeywords 't)
+#+end_src
+*** Mobile
+*** csl
+#+begin_src elisp
+(setq org-cite-csl-styles-dir "~/Zotero/styles")
+#+end_src
+*** LaTeX
+**** Packages
+#+BEGIN_SRC elisp
+(setq org-latex-packages-alist '(("dvipsnames,svgnames,x11names" "xcolor" t)
+                                 ("" "mathtools" t)
+                                 ("" "physics" t)
+                                 ("bbsets" "jkmath" t)
+                                 ("makeroom" "cancel" t)
+                                 ("" "units" t)
+                                 ("" "svg" nil)
+                                 ("" "listings" nil)
+                                 ("inline" "enumitem" nil)))
+#+END_SRC
+**** cite
+#+begin_src elisp
+(after! oc-biblatex
+  (defun org-cite-biblatex-export-citation (citation style _ info)
+    "Export CITATION object.
+STYLE is the citation style, as a pair of either strings or nil.
+INFO is the export state, as a property list."
+    (apply
+     #'org-cite-biblatex--command citation info
+     (pcase style
+       ;; "author" style.
+       (`(,(or "author" "a") . ,variant)
+        (pcase variant
+          ((or "caps" "c")            '("Citeauthor*"))
+          ((or "full" "f")            '("citeauthor"))
+          ((or "caps-full" "cf")      '("Citeauthor"))
+          (_                          '("citeauthor*"))))
+       ;; "locators" style.
+       (`(,(or "locators" "l") . ,variant)
+        (pcase variant
+          ((or "bare" "b")            '("notecite"))
+          ((or "caps" "c")            '("Pnotecite"))
+          ((or "bare-caps" "bc")      '("Notecite"))
+          (_                          '("pnotecite"))))
+       ;; "noauthor" style.
+       (`(,(or "noauthor" "na") . ,variant)
+        (pcase variant
+          ((or "bare" "b")            '("cite*"))
+          (_                          '("autocite*"))))
+       ;; "nocite" style.
+       (`(,(or "nocite" "n") . ,_)    '("nocite" nil t))
+       ;; "text" style.
+       (`(,(or "text" "t") . ,variant)
+        (pcase variant
+          ((or "caps" "c")            '("Textcite" t))
+          (_                          '("textcite" t))))
+       ;; "title" style
+       (`(,(or "title" "t") . ,variant)
+        (pcase variant
+          ((or "full" "f")            '("citetitle*"))
+          (_                          '("citetitle"))))
+       ;; "year" style
+       (`(,(or "year" "y") . ,_)      '("citeyear"))
+       ;; Default "nil" style.
+       (`(,_ . ,variant)
+        (pcase variant
+          ((or "bare" "b")            '("cite" t))
+          ((or "caps" "c")            '("Autocite" t))
+          ((or "bare-caps" "bc")      '("Cite" t))
+          (_                          '("autocite" t))))
+       ;; This should not happen.
+       (_ (error "Invalid style: %S" style))))))
+#+end_src
+**** Format
+#+BEGIN_SRC elisp
+(after! org
+  (setq org-format-latex-options
+        '(:foreground default
+          :background default
+          :scale 1.1
+          :html-foreground "Black"
+          :html-background "Transparent"
+          :html-scale 1.0
+          :matchers ("begin" "$1" "$" "$$" "\\(" "\\["))))
+#+END_SRC
+**** Preview
+***** Method Customizations
+#+BEGIN_SRC elisp
+(after! org
+  (add-to-list 'org-preview-latex-process-alist
+               '(dvisvgm-svgcleaner
+                 :programs ("latex" "dvisvgm" "svgcleaner")
+                 :description "dvi > svg"
+                 :message "you need to install the programs: latex and dvisvgm and svgcleaner."
+                 :image-input-type "dvi"
+                 :image-output-type "svg"
+                 :image-size-adjust (1.7 . 1.5)
+                 :latex-compiler ("latex -interaction nonstopmode -output-directory %o %f")
+                 :image-converter ("dvisvgm %f --no-fonts --exact-bbox --scale=%S --optimize --stdout | svgcleaner --multipass - %O")))
+  (add-to-list 'org-preview-latex-process-alist
+               '(dvisvgm-svgz
+                 :programs ("latex" "dvisvgm" "svgcleaner")
+                 :description "dvi > svg"
+                 :message "you need to install the programs: latex and dvisvgm and svgcleaner."
+                 :image-input-type "dvi"
+                 :image-output-type "svgz"
+                 :image-size-adjust (1.7 . 1.5)
+                 :latex-compiler ("latex -interaction nonstopmode -output-directory %o %f")
+                 :image-converter ("dvisvgm %f --no-fonts --exact-bbox --scale=%S --optimize --output=%O")))
+  )
+#+END_SRC
+***** Default Method
+#+BEGIN_SRC elisp
+(setq org-preview-latex-default-process 'dvisvgm-svgcleaner)
+#+END_SRC
+**** Export
+***** lualatex
+#+BEGIN_SRC elisp
+(setq org-latex-compiler "lualatex")
+#+END_SRC
+***** export commands
+#+BEGIN_SRC elisp
+(setq org-latex-pdf-process
+      '("latexmk -f -pdf -%latex -interaction=nonstopmode -shell-escape -outdir=%o %f"))
+#+END_SRC
+***** Full width image
+#+BEGIN_SRC elisp
+(setq org-latex-image-default-width "")
+#+END_SRC
+***** Listings
+#+BEGIN_SRC elisp
+(setq org-latex-listings t
+      org-latex-listings-options '(("basicstyle" "\\ttfamily\\footnotesize")
+                                   ("breakatwhitespace" "true")
+                                   ("breaklines" "true")
+                                   ("commentstyle" "\\color{gray}")
+                                   ("keepspaces" "true")
+                                   ("keywordstyle" "\\color{red}")
+                                   ("showspaces" "false")
+                                   ("showstringspaces" "false")
+                                   ("stringstyle" "\\color{Green}")
+                                   ("tabsize" "2")))
+#+END_SRC
+***** document classes
+****** mla
+#+begin_src elisp
+(after! ox-latex
+  (add-to-list 'org-latex-classes
+               '("mla" "\\documentclass[mla8]{mla}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+#+end_src
+****** apa
+#+begin_src elisp
+(after! ox-latex
+  (add-to-list 'org-latex-classes
+               '("apa" "\\documentclass[stu,biblatex]{apa7}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+#+end_src
+*** Pandoc
+**** nil
+#+begin_src elisp
+(setq org-pandoc-options-for-nil nil)
+#+end_src
+**** docx
+#+begin_src elisp
+(setq org-pandoc-options-for-docx '((lua-filter . "pagebreak.lua")))
+#+end_src
+*** Tasks
+#+BEGIN_SRC elisp
+(setq org-log-done 'time)
+#+END_SRC
+*** Async export
+#+begin_src elisp
+(setq org-export-in-background 't)
+#+end_src
+
+#+begin_src elisp
+(defadvice! fixed-+org--fix-async-export-a (fn &rest args)
+  :override #'+org--fix-async-export-a
+  (let ((old-async-init-file org-export-async-init-file)
+        (org-export-async-init-file (make-temp-file "doom-org-async-export")))
+    (with-temp-file org-export-async-init-file
+      (prin1 `(progn (setq org-export-async-debug
+                           ,(or org-export-async-debug
+                                debug-on-error)
+                           load-path ',load-path)
+                     (unwind-protect
+                         (let ((file ,old-async-init-file))
+                           (if file
+                               (load file nil t)
+                             (load ,early-init-file nil t)
+                             (require 'doom-start)))
+                       (delete-file load-file-name)))
+             (current-buffer)))
+    (apply fn args)))
+#+end_src
+** Prose stuff
+*** setup vale
+#+BEGIN_SRC elisp
+(flycheck-vale-setup)
+#+END_SRC
+** Writeroom width
+#+begin_src elisp
+(setq writeroom-width 100)
+#+end_src
+** Plantuml use system jar
+#+BEGIN_SRC elisp
+(setq plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")
+#+END_SRC
+** cc
+*** default indentation
+#+BEGIN_SRC elisp
+(after! cc-mode
+  (setq c-default-style '((awk-mode . "awk")
+                          (other . "linux")))
+  (setq-default c-basic-offset 2)
+  (c-set-offset 'innamespace 0))
+#+END_SRC
+*** clang files
+#+begin_src elisp
+
+#+end_src
+*** Java disable lsp format
+#+BEGIN_SRC elisp
+(setq lsp-java-format-enabled nil)
+#+END_SRC
+** lsp
+*** sideline
+#+begin_src elisp
+(setq lsp-ui-sideline-update-mode 'line
+      lsp-ui-sideline-diagnostic-max-lines 99)
+#+end_src
+*** doc
+#+begin_src elisp
+(setq lsp-ui-doc-enable nil)
+#+end_src
+
+** zoxide
+#+begin_src elisp
+(map! :leader
+      :desc "Find file with zoxide" "f z" #'zoxide-find-file)
+#+end_src
