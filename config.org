@@ -351,6 +351,17 @@ INFO is the export state, as a property list."
                  ("\\paragraph{%s}" . "\\paragraph*{%s}")
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
 #+end_src
+****** standalone
+#+begin_src elisp
+(after! ox-latex
+  (add-to-list 'org-latex-classes
+               '("standalone" "\\documentclass{standalone}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+#+end_src
 *** Pandoc
 **** nil
 #+begin_src elisp
