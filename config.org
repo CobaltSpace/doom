@@ -283,7 +283,7 @@ INFO is the export state, as a property list."
                  :image-output-type "svg"
                  :image-size-adjust (1.7 . 1.5)
                  :latex-compiler ("latex -interaction nonstopmode -output-directory %o %f")
-                 :image-converter ("dvisvgm %f --no-fonts --exact-bbox --scale=%S --optimize --stdout | svgcleaner --multipass - %O")))
+                 :image-converter ("dvisvgm %f --no-fonts --exact-bbox --scale=%S --output=%O" "svgcleaner --multipass %O %O")))
   (add-to-list 'org-preview-latex-process-alist
                '(dvisvgm-svgz
                  :programs ("latex" "dvisvgm" "svgcleaner")
@@ -293,7 +293,7 @@ INFO is the export state, as a property list."
                  :image-output-type "svgz"
                  :image-size-adjust (1.7 . 1.5)
                  :latex-compiler ("latex -interaction nonstopmode -output-directory %o %f")
-                 :image-converter ("dvisvgm %f --no-fonts --exact-bbox --scale=%S --optimize --output=%O")))
+                 :image-converter ("dvisvgm %f --no-fonts --exact-bbox --scale=%S --output=%O")))
   )
 #+END_SRC
 ***** Default Method
