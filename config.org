@@ -38,13 +38,16 @@ available. You can either set `doom-theme' or manually load a theme with the
 `load-theme' function. This is the default:
 #+BEGIN_SRC elisp
 (setq doom-theme 'doom-tokyo-night)
-(setq rand-theme-unwanted '(doom-acario-light
+(setq rand-theme-unwanted '(
+                            adwaita
+                            doom-acario-light
+                            doom-bluloco-light
                             doom-feather-light
                             doom-manokai-machine
                             doom-opera-light
+                            doom-one-light
                             modus-vivendi-deuteranopia
                             modus-operandi
-                            adwaita
                             ))
 (rand-theme)
 #+END_SRC
