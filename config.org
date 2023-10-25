@@ -40,9 +40,11 @@ available. You can either set `doom-theme' or manually load a theme with the
 (setq doom-theme 'doom-tokyo-night)
 (setq rand-theme-unwanted '(
                             adwaita
+                            dichromacy
                             doom-acario-light
                             doom-bluloco-light
                             doom-feather-light
+                            doom-ir-black
                             doom-manokai-machine
                             doom-opera-light
                             doom-one-light
