@@ -42,15 +42,20 @@ available. You can either set `doom-theme' or manually load a theme with the
                             adwaita
                             dichromacy
                             doom-acario-light
+                            doom-ayu-light
                             doom-bluloco-light
                             doom-feather-light
                             doom-ir-black
                             doom-manokai-machine
+                            doom-meltbus
                             doom-opera-light
                             doom-one-light
                             doom-solarized-light
+                            doom-tomorrow-day
                             modus-vivendi-deuteranopia
                             modus-operandi
+                            tsdh-light
+                            wheatgrass
                             ))
 (rand-theme)
 #+END_SRC
