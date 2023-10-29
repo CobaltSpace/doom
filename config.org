@@ -48,6 +48,7 @@ available. You can either set `doom-theme' or manually load a theme with the
                             doom-manokai-machine
                             doom-opera-light
                             doom-one-light
+                            doom-solarized-light
                             modus-vivendi-deuteranopia
                             modus-operandi
                             ))
