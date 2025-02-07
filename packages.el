@@ -28,11 +28,14 @@
 (package! redpen-paragraph)
 (package! flycheck-vale)
 
+;; (package! riscv-mode)
+
 (package! org-preview-html)
 
 (package! highlight-refontification)
 (package! zoxide)
 (package! rand-theme)
+(package! catppuccin-theme)
 
 ;; (package! system-clang-tools :recipe (:local-repo "/usr/share/clang/"))
 ;; (package! system-site-lisp :recipe (:local-repo "/usr/share/emacs/site-lisp"))

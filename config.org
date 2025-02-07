@@ -37,7 +37,7 @@ There are two ways to load a theme. Both assume the theme is installed and
 available. You can either set `doom-theme' or manually load a theme with the
 `load-theme' function. This is the default:
 #+BEGIN_SRC elisp
-(setq doom-theme 'doom-tokyo-night)
+(setq doom-theme 'catppuccin)
 (setq rand-theme-unwanted '(
                             adwaita
                             dichromacy
@@ -45,19 +45,24 @@ available. You can either set `doom-theme' or manually load a theme with the
                             doom-ayu-light
                             doom-bluloco-light
                             doom-feather-light
+                            doom-homage-white
                             doom-ir-black
                             doom-manokai-machine
                             doom-meltbus
+                            doom-oksolar-light
                             doom-opera-light
                             doom-one-light
                             doom-solarized-light
                             doom-tomorrow-day
+                            modus-operandi
+                            modus-vivendi
                             modus-vivendi-deuteranopia
                             modus-operandi
                             tsdh-light
                             wheatgrass
+                            whiteboard
                             ))
-(rand-theme)
+;; (rand-theme)
 #+END_SRC
 
 * Org Directory
@@ -213,7 +218,7 @@ they are implemented.
                                  ("makeroom" "cancel" t)
                                  ("" "units" t)
                                  ("" "svg" nil)
-                                 ("" "listings" nil)
+                                 ("newfloat" "minted" nil)
                                  ("inline" "enumitem" nil)))
 #+END_SRC
 **** cite
@@ -327,7 +332,7 @@ INFO is the export state, as a property list."
 #+END_SRC
 ***** Listings
 #+BEGIN_SRC elisp
-(setq org-latex-listings t
+(setq org-latex-listings 'minted
       org-latex-listings-options '(("basicstyle" "\\ttfamily\\footnotesize")
                                    ("breakatwhitespace" "true")
                                    ("breaklines" "true")

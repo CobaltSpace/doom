@@ -2,9 +2,9 @@
 # name: quiz
 # key: quiz
 # --
-#+OPTIONS: toc:nil
-#+LATEX_CLASS_OPTIONS: [fleqn,12pt]
-#+LATEX_HEADER: \usepackage[margin=0.5in]{geometry}
-#+LATEX: \pagenumbering{gobble}
-#+LATEX: \setlength{\parindent}{0}
+#+OPTIONS: toc:nil ^:{}
+# #+LATEX_CLASS_OPTIONS: [fleqn,12pt]
+# #+LATEX_HEADER: \usepackage[margin=0.5in]{geometry}
+# #+LATEX: \pagenumbering{gobble}
+# #+LATEX: \setlength{\parindent}{0}
 $0
